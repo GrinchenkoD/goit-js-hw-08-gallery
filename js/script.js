@@ -39,6 +39,7 @@ galleryArr.forEach(elem => {
       </li>`,
   );
 });
+galleryRef.addEventListener('click', modalOpen);
 
 function modalClose(event) {
   if (
@@ -69,4 +70,3 @@ function modalOpen(event) {
   modalRef.addEventListener('click', modalClose);
   document.addEventListener('keydown', modalEscClose);
 }
-galleryRef.addEventListener('click', modalOpen);
