@@ -64,7 +64,6 @@ function modalEscClose(event) {
   }
 }
 function changeImg(event) {
-  let currentImgRef = imgArrRef[lightboxImgRef.dataset.index];
   let nextImgRef = imgArrRef[+lightboxImgRef.dataset.index + 1];
   let previousImgRef = imgArrRef[+lightboxImgRef.dataset.index - 1];
   if (event.key === 'ArrowRight') {
