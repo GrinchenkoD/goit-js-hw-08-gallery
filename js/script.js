@@ -17,10 +17,12 @@ import galleryArr from './gallery-items.js';
 const galleryRef = document.querySelector('.js-gallery');
 const modalRef = document.querySelector('.js-lightbox');
 const lightboxImgRef = document.querySelector('.lightbox__image');
-// ===========================================================
+// const imgArrRef = document.querySelector('.gallery__image');
 
 // ===========================================================
 
+// ===========================================================
+let dataCounter = 0;
 galleryArr.forEach(elem => {
   galleryRef.insertAdjacentHTML(
     'beforeend',
@@ -34,6 +36,7 @@ galleryArr.forEach(elem => {
             src="${elem.preview}"
             data-source="${elem.original}"
             alt="${elem.description}"
+            data-index="${dataCounter++}"
           />
         </a>
       </li>`,
@@ -54,8 +57,27 @@ function modalEscClose(event) {
   if (event.key === 'Escape') {
     modalRef.classList.remove('is-open');
     lightboxImgRef.src = '';
+    lightboxImgRef.dataset.index = '';
     document.removeEventListener('keydown', modalEscClose);
     modalRef.removeEventListener('click', modalClose);
+    document.removeEventListener('keydown', changeImg);
+  }
+}
+function changeImg(event) {
+  let currentImgRef = imgArrRef[lightboxImgRef.dataset.index];
+  let nextImgRef = imgArrRef[+lightboxImgRef.dataset.index + 1];
+  let previousImgRef = imgArrRef[+lightboxImgRef.dataset.index - 1];
+  if (event.key === 'ArrowRight') {
+    lightboxImgRef.dataset.index === '8' ? (nextImgRef = imgArrRef[0]) : '';
+    lightboxImgRef.src = nextImgRef.dataset.source;
+    lightboxImgRef.dataset.index = nextImgRef.dataset.index;
+    lightboxImgRef.alt = nextImgRef.alt;
+  }
+  if (event.key === 'ArrowLeft') {
+    lightboxImgRef.dataset.index === '0' ? (previousImgRef = imgArrRef[8]) : '';
+    lightboxImgRef.src = previousImgRef.dataset.source;
+    lightboxImgRef.dataset.index = previousImgRef.dataset.index;
+    lightboxImgRef.alt = previousImgRef.alt;
   }
 }
 
@@ -67,6 +89,9 @@ function modalOpen(event) {
   modalRef.classList.add('is-open');
   lightboxImgRef.src = event.target.dataset.source;
   lightboxImgRef.alt = event.target.alt;
+  lightboxImgRef.dataset.index = event.target.dataset.index;
   modalRef.addEventListener('click', modalClose);
   document.addEventListener('keydown', modalEscClose);
+  document.addEventListener('keydown', changeImg);
 }
+const imgArrRef = document.querySelectorAll('.gallery__image');
